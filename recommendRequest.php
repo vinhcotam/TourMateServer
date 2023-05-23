@@ -1,0 +1,54 @@
+<?php
+    include ('connectdb.php');
+    mysqli_query($conn,"SET NAMES 'utf8'");
+    $query = "SELECT * FROM data_location ";
+    $data = mysqli_query($conn,$query);
+    $received_name = $_GET['name'];
+
+    
+    class Data_Location {
+        public $id;
+        public $name;
+        public $location;
+        public $latitude;
+        public $longtitude;
+        public $city_id;
+        public $vote_average;
+        public $vote_count;
+        public $min_hour;
+        public $max_hour;
+        public $image_url;
+        public $description;
+        public $english_name;
+        public $received_name;
+        function __construct($id, $name, $location, $latitude, $longtitude, $city_id, 
+        $vote_average, $vote_count, $min_hour, $max_hour, $image_url, $description, $english_name, $received_name) {
+            $this->id = $id;
+            $this->name = $name;
+            $this->location = $location;
+            $this->latitude = $latitude;
+            $this->longtitude = $longtitude;
+            $this->city_id = $city_id;
+            $this->vote_average = $vote_average;
+            $this->vote_count = $vote_count;
+            $this->min_hour = $min_hour;
+            $this->max_hour = $max_hour;
+            $this->image_url = $image_url;
+            $this->description = $description;
+            $this->english_name = $english_name;
+            $this->received_name = $received_name;
+        }
+    }
+
+    $locationArray = array();
+    while($row = mysqli_fetch_assoc($data)){
+        array_push($locationArray, new Data_Location($row['id'],$row['name'],$row['location'], $row['latitude'],
+        $row['longtitude'],$row['city_id'],$row['vote_average'],$row['vote_count'],$row['min_hour']
+        ,$row['max_hour'],$row['image_url'],$row['description'],$row['english_name'],$received_name));
+        
+    }
+    // echo $received_name;
+    // $query_string = http_build_query(array('name' => $received_name));
+    // echo $query_string;
+    echo json_encode($locationArray);
+?>
